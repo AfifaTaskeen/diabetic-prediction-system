@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Assessment Form</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card animate-fade-in">
+            <div class="text-center mb-4">
+                <h2>Diabetes Risk Assessment</h2>
+                <p class="subtitle">Please provide your health information for analysis</p>
+            </div>
+            
+            <form action="/predict" method="POST">
+                <div class="grid-form">
+                    <!-- Patient Information -->
+                    <div class="form-group full-width">
+                        <label for="name" class="form-label">Full Name</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-user"></i>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+
+                    <!-- Health Metrics -->
+                    <div class="form-group">
+                        <label for="preg" class="form-label">Pregnancies</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-baby"></i>
+                            <input type="number" id="preg" name="preg" class="form-control" placeholder="e.g. 2" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="glu" class="form-label">Glucose (mg/dL)</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-tint"></i>
+                            <input type="number" id="glu" name="glu" class="form-control" placeholder="e.g. 120" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bp" class="form-label">Blood Pressure (mm Hg)</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-heartbeat"></i>
+                            <input type="number" id="bp" name="bp" class="form-control" placeholder="e.g. 80" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="skin" class="form-label">Skin Thickness (mm)</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-ruler-vertical"></i>
+                            <input type="number" id="skin" name="skin" class="form-control" placeholder="e.g. 23" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ins" class="form-label">Insulin (mu U/ml)</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-syringe"></i>
+                            <input type="number" id="ins" name="ins" class="form-control" placeholder="e.g. 80" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bmi" class="form-label">BMI</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-weight"></i>
+                            <input type="number" id="bmi" name="bmi" step="0.1" class="form-control" placeholder="e.g. 25.5" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dpf" class="form-label">Diabetes Pedigree Function</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-dna"></i>
+                            <input type="number" id="dpf" name="dpf" step="0.001" class="form-control" placeholder="e.g. 0.345" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age" class="form-label">Age (years)</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-birthday-cake"></i>
+                            <input type="number" id="age" name="age" class="form-control" placeholder="e.g. 35" min="1" max="120" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg full-width">
+                            <i class="fas fa-chart-line me-2"></i> Analyze My Risk
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="privacy-note mt-4 text-center text-muted" style="font-size: 0.875rem;">
+                <i class="fas fa-lock me-1"></i> Your information is secure and will be used only for risk assessment.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Reset form when coming from the result page
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            
+            // Check if we should reset the form
+            if (sessionStorage.getItem('resetForm') === 'true') {
+                form.reset();
+                sessionStorage.removeItem('resetForm');
+            }
+            
+            // Add loading state to submit button
+            form.addEventListener('submit', function() {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Analyzing...';
+            });
+            
+            // Reset button state if form submission fails
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

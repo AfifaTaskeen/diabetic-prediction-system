@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Assessment Report</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Report Card */
+        .report-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Header */
+        .report-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 1.5rem;
+        }
+
+        .report-header h1 {
+            color: var(--primary);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Patient Info */
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            background: var(--gray-100);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Risk Level */
+        .risk-level {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .risk-level.high {
+            background-color: #fef2f2;
+            border-left: 4px solid var(--danger);
+        }
+
+        .risk-level.low {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .risk-icon {
+            font-size: 1.75rem;
+        }
+
+        .risk-level.high .risk-icon {
+            color: var(--danger);
+        }
+
+        .risk-level.low .risk-icon {
+            color: var(--success);
+        }
+
+        .risk-content h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.25rem;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: var(--gray-50);
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            line-height: 1.7;
+        }
+
+        /* Recommendations */
+        .recommendations {
+            margin: 1.5rem 0;
+        }
+
+        .recommendation-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .recommendation-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .recommendation-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .recommendation-content h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .recommendation-content p {
+            margin: 0;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background-color: #f8fafc;
+            border-left: 4px solid #94a3b8;
+            padding: 1.25rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .disclaimer h4 {
+            margin-top: 0;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .disclaimer i {
+            color: #64748b;
+        }
+
+        .report-date {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            gap: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-100);
+            transform: translateY(-2px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .report-card {
+                padding: 1.5rem;
+            }
+
+            .patient-info {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="report-card">
+            <!-- Report Header -->
+            <header class="report-header">
+                <h1>Diabetes Risk Assessment Report</h1>
+                <p class="report-subtitle">Comprehensive Health Analysis</p>
+            </header>
+
+            <!-- Patient Information -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-user-circle"></i> Patient Information</h2>
+                <div class="patient-info">
+                    <div class="info-item">
+                        <span class="info-label">Patient Name</span>
+                        <span class="info-value">{{ name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Assessment Date</span>
+                        <span class="info-value" id="assessment-date"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Risk Assessment -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> Risk Assessment</h2>
+                
+                {% if "Higher" in result %}
+                <div class="risk-level high">
+                    <div class="risk-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h3>Risk Level: High</h3>
+                        <p>Our analysis indicates an elevated risk of diabetes based on the provided health indicators.</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="risk-level low">
+                    <div class="risk-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h3>Risk Level: Low</h3>
+                        <p>Your current health indicators suggest a lower risk of diabetes at this time.</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Explanation -->
+                <div class="explanation">
+                    {% if "Higher" in result %}
+                    <p>This assessment indicates that you may be at an increased risk of developing diabetes. Several health indicators in your assessment fall outside the optimal range. While this is not a diagnosis, it suggests that proactive measures may be beneficial for your long-term health.</p>
+                    {% else %}
+                    <p>Your assessment shows that your current health indicators are within ranges typically associated with a lower risk of diabetes. This is a positive sign, but maintaining healthy lifestyle choices remains important for your overall well-being.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- Recommendations -->
+            <section class="section">
+                <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Recommendations</h2>
+                <div class="recommendations">
+                    {% if "Higher" in result %}
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="recommendation-content">
+                            <h4>Medical Consultation</h4>
+                            <p>Schedule an appointment with a healthcare provider for a comprehensive evaluation and possible diagnostic testing.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="recommendation-content">
+                            <h4>Balanced Nutrition</h4>
+                            <p>Adopt a diet rich in whole grains, lean proteins, and vegetables. Limit processed foods, sugary drinks, and excessive carbohydrates.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-walking"></i>
+                        </div>
+                        <div class="recommendation-content">
+                            <h4>Regular Physical Activity</h4>
+                            <p>Aim for at least 150 minutes of moderate-intensity exercise per week, such as brisk walking, swimming, or cycling.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-weight"></i>
+                        </div>
+                        <div class="recommendation-content">
+                            <h4>Weight Management</h4>
+                            <p>Maintain a healthy weight through a combination of diet and exercise. Even modest weight loss can significantly reduce diabetes risk.</p>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="recommendation-content">
+                            <h4>Regular Monitoring</h4>
+                            <p>{% if "Higher" in result %}Schedule regular health check-ups and monitor your blood sugar levels as recommended by your healthcare provider.{% else %}Continue with routine health screenings to monitor your health status over time.{% endif %}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Notice</h4>
+                <p>This AI-generated assessment is not a medical diagnosis. It is intended for informational purposes only and should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</p>
+                <p class="report-date">Report generated on: <span id="report-date"></span></p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/download_pdf" class="btn btn-primary">
+                    <i class="fas fa-file-pdf"></i> Download PDF Report
+                </a>
+                <a href="/form" class="btn btn-secondary">
+                    <i class="fas fa-redo"></i> New Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set current date in the report
+        const now = new Date();
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit', 
+            minute: '2-digit'
+        };
+        
+        document.getElementById('assessment-date').textContent = now.toLocaleDateString('en-US', options);
+        document.getElementById('report-date').textContent = now.toLocaleDateString('en-US', { 
+            ...options,
+            timeZoneName: 'short'
+        });
+
+        // Reset form when starting a new assessment
+        document.querySelector('a[href="/form"]').addEventListener('click', function(e) {
+            // This will ensure the form is reset when navigating back
+            sessionStorage.setItem('resetForm', 'true');
+        });
+    </script>
+</body>
+</html>
